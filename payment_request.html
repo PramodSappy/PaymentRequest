@@ -3,52 +3,66 @@
   <head>
     <script>
   
-  
     const supportedPaymentMethods = [
-    {
-      supportedMethods: "https://w3c.mcskunkworks.com/pay"
-    }
+      {
+          supportedMethods: "basic-card",
+          data: {
+          supportedNetworks: ["visa", "mastercard"],
+          supportedTypes: ["debit", "credit"],
+          },
+      },
+      {
+          supportedMethods: "https://w3c.mcskunkworks.com/pay",
+          merchantName: 'Amazon',
+          data: {
+          merchantIdentifier: "4i345hikjhiqwkhjf8adfh13",
+          bobPaySpecificField: true,
+          },
+      }
   ];
   
   const paymentDetails = {
-    total: {
-      label: 'Total',
-      amount:{
-        currency: 'USD',
-        value: 0
-      }
-    }
+      total: {label: 'Total', amount: {currency: 'USD', value: '400.00'}},
+      displayItems: [
+          {
+          label: 'Apple Watch Series 3',
+          amount: {currency: 'USD', value: '500.00'},
+          },
+          {
+          label: 'apple discount',
+          amount: {currency: 'USD', value: '-100.00'},
+          },
+      ]
+     
   };
+  
   // Options isn't required.
   const options = {};
-  
-  
       function pay(){
-        if(window.PaymentRequest) {
-          console.log("Calling Payment Request");
-          const PR = new PaymentRequest(
-            supportedPaymentMethods,
-            paymentDetails,
-            options
-          );
+          if(window.PaymentRequest) {
+              console.log("Calling Payment Request");
+              const PR = new PaymentRequest(
+                  supportedPaymentMethods,
+                  paymentDetails,
+                  options
+              );
   
-          PR.show()
-            .then((paymentResponse) => {
-              // The user filled in the required fields and completed the flow
-              // Get the details from `paymentResponse` and complete the transaction.
-              return paymentResponse.complete();
-            })
-            .catch((err) => {
-              console.log("Error: "+err);
-            });
+              PR.show()
+              .then((paymentResponse) => {
+                  // The user filled in the required fields and completed the flow
+                  // Get the details from `paymentResponse` and complete the transaction.
+                  return paymentResponse.complete();
+              })
+              .catch((err) => {
+                  console.log("Error: "+err);
+              });
   
+          } else {
+              alert("Damn!!")
   
-        } else {
-          alert("Damn!!")
-  
-        }
+          }
       }
-    </script>
+  </script>
   </head>
   
   <body>
@@ -57,4 +71,3 @@
   </body>
   
   </html>
-  
