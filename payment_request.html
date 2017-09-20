@@ -11,24 +11,6 @@
           supportedTypes: ["debit", "credit"],
           },
       },
-
-      {  
-    supportedMethods: ['https://android.com/pay'],  
-  data: {  
-    merchantName: 'Android Pay Demo',  
-    merchantId: '00000000000000000000',  
-    environment: 'TEST',  
-    allowedCardNetworks: ['AMEX', 'DISCOVER', 'MASTERCARD', 'VISA'],  
-    paymentMethodTokenizationParameters: {  
-      tokenizationType: 'GATEWAY_TOKEN',  
-      parameters: {  
-        'gateway': 'stripe',  
-        'stripe:publishableKey': 'xx_demo_xxxxxxxxxxxxxxxxxxxxxxxx',  
-        'stripe:version': '2016-07-06',  
-      }  
-    } 
-  } 
-},
       {
           supportedMethods: "https://w3c.mcskunkworks.com/pay",
           merchantName: 'Amazon',
@@ -57,12 +39,6 @@
   // Options isn't required.
   const options = {};
       function pay(){
-        if (navigator.getInstalledRelatedApps) {
-          navigator.getInstalledRelatedApps()
-          .then(apps => {
-          console.log(app.id);
-          // if(apps.length > 0) { /* Hide the UI */ }
-        });
           if(window.PaymentRequest) {
               console.log("Calling Payment Request");
               const PR = new PaymentRequest(
