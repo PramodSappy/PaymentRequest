@@ -73,8 +73,11 @@ function onBuyClicked(request) {
 */
 function onCanMakePaymentButtonClicked(request) {
   document.getElementById('canMakePaymentResult').innerHTML = "";
+  console.log('Pramod1--------------');
   if (request.canMakePayment) {
+    console.log('Pramod1--------------'+request.canMakePayment);
     request.canMakePayment().then(function(result) {
+      console.log('Pramod1--------------'+result);
       document.getElementById('canMakePaymentResult').innerHTML = result;
     }).catch(function(err) {
       console.log(err);
