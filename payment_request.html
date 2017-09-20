@@ -52,7 +52,14 @@
   //       }
   //     }
 
-  const supportedPayments = ['https://android.com/pay'];
+  const supportedPayments = [{
+    supportedMethods:'https://android.com/pay',
+    data:{
+      merchantId:'',
+      environment:'TEST',
+      allowedCardNetworks:['AMEX','MASTERCARD','VISA','DISCOVER']
+    }
+  }];
   const paymentDetails = {
     total: {
       label:'Total',
