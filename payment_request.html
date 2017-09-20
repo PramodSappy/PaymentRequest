@@ -57,6 +57,12 @@
   // Options isn't required.
   const options = {};
       function pay(){
+        if (navigator.getInstalledRelatedApps) {
+          navigator.getInstalledRelatedApps()
+          .then(apps => {
+          console.log(app.id);
+          // if(apps.length > 0) { /* Hide the UI */ }
+        });
         navigator.getInstalledRelatedApps().then(relatedApps => {
           for (let app of relatedApps) {
             console.log(app.platform);
