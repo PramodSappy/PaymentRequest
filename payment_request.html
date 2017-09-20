@@ -63,13 +63,6 @@
           console.log(app.id);
           // if(apps.length > 0) { /* Hide the UI */ }
         });
-        navigator.getInstalledRelatedApps().then(relatedApps => {
-          for (let app of relatedApps) {
-            console.log(app.platform);
-            console.log(app.url);
-            console.log(app.id);
-          }
-        });
           if(window.PaymentRequest) {
               console.log("Calling Payment Request");
               const PR = new PaymentRequest(
