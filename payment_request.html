@@ -39,6 +39,12 @@
   // Options isn't required.
   const options = {};
       function pay(){
+        if (navigator.getInstalledRelatedApps) {
+          navigator.getInstalledRelatedApps()
+            .then(apps => {
+              console.log('apps are'+apps);
+                if(apps.length > 0) { /* Hide the UI */ }
+        });
           if(window.PaymentRequest) {
               console.log("Calling Payment Request");
               const PR = new PaymentRequest(
