@@ -1,81 +1,113 @@
+<!DOCTYPE html>
 <html>
-  
-  <head>
-    <script>
-  
-    const supportedPaymentMethods = [
-      {
-          supportedMethods: "basic-card",
-          data: {
-          supportedNetworks: ["visa", "mastercard"],
-          supportedTypes: ["debit", "credit"],
-          },
+<head>
+  <title>W3C Payment Handler API Test</title>
+</head>
+<body>
+  <input class="messageCheckbox" type="checkbox" value="basic-card" name="basic-card" checked> basic-card<br>
+  <input class="messageCheckbox" type="checkbox" value="https://oceanhuang-github-io-bankoo.herokuapp.com" name="3rd-party" checked> 3rd-party<br>
+
+  <div><button id="canMakePaymentButton">CanMakePayment</button></div>
+  <div><pre id="canMakePaymentResult"></pre></div>
+
+  <div><button id="buyButton">Buy</button></div>
+  <div><pre id="result"></pre></div>
+  <script type="text/javascript">
+  function initPaymentRequest() {
+    var checkedValue = [];
+    var inputElements = document.getElementsByClassName('messageCheckbox');
+    for(var i=0; inputElements[i]; ++i){
+      if(inputElements[i].checked){
+        checkedValue.push(inputElements[i].value);
+      }
+    }
+
+    let supportedInstruments = [{
+      supportedMethods: checkedValue,
+      data: {
+        merchantName: 'Display name of merchant',
+        customKey: 'customValue'
       },
-      {
-          supportedMethods: "https://w3c.mcskunkworks.com/pay",
-          merchantName: 'Amazon',
-          data: {
-          merchantIdentifier: "4i345hikjhiqwkhjf8adfh13",
-          bobPaySpecificField: true,
-          },
-      }
-  ];
-  
-  const paymentDetails = {
-      total: {label: 'Total', amount: {currency: 'USD', value: '400.00'}},
+    }];
+    let details = {
+      total: {label: 'Donation', amount: {currency: 'USD', value: '55.00'}},
       displayItems: [
-          {
-          label: 'Apple Watch Series 3',
-          amount: {currency: 'USD', value: '500.00'},
-          },
-          {
-          label: 'apple discount',
-          amount: {currency: 'USD', value: '-100.00'},
-          },
-      ]
-     
-  };
-  
-  // Options isn't required.
-  const options = {};
-      function pay(){
-        if (navigator.getInstalledRelatedApps) {
-          navigator.getInstalledRelatedApps()
-            .then(apps => {
-              console.log('apps are'+apps);
-              console.log('apps are length'+apps.length);
-                if(apps.length > 0) { /* Hide the UI */ }
-          });
-        }
-          if(window.PaymentRequest) {
-              console.log("Calling Payment Request");
-              const PR = new PaymentRequest(
-                  supportedPaymentMethods,
-                  paymentDetails,
-                  options
-              );
-  
-              PR.show()
-              .then((paymentResponse) => {
-                  // The user filled in the required fields and completed the flow
-                  // Get the details from `paymentResponse` and complete the transaction.
-                  return paymentResponse.complete();
-              })
-              .catch((err) => {
-                  console.log("Error: "+err);
-              });
-  
-          } else {
-              alert("Damn!!")
-  
-          }
-      }
-  </script>
-  </head>
-  
-  <body>
-    <h1>Shop</h1>
-    <button onclick="pay();">Pay</button>
-  </body>
-  
-  </html>
+    {
+      label: 'Original donation amount',
+      amount: {currency: 'USD', value: '65.00'},
+    },
+  {
+    label: 'Friends and family discount',
+    amount: {currency: 'USD', value: '-10.00'},
+  },
+  ],
+};
+return new PaymentRequest(supportedInstruments, details);
+}
+/**
+* Invokes PaymentRequest.
+*
+* @param {PaymentRequest} request The PaymentRequest object.
+*/
+function onBuyClicked(request) {
+  document.getElementById('result').innerHTML = "";
+  request.show().then(function(instrumentResponse) {
+    instrumentResponse.complete('success')
+    .then(function() {
+      document.getElementById('result').innerHTML =
+      instrumentToJsonString(instrumentResponse);
+    }).catch(function(err) {
+      console.log(err);
+    });
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
+}
+/**
+* Invokes canMakePayment
+*
+* @param {PaymentRequest} request The PaymentRequest object.
+*/
+function onCanMakePaymentButtonClicked(request) {
+  document.getElementById('canMakePaymentResult').innerHTML = "";
+  if (request.canMakePayment) {
+    request.canMakePayment().then(function(result) {
+      document.getElementById('canMakePaymentResult').innerHTML = result;
+    }).catch(function(err) {
+      console.log(err);
+    });
+  }
+}
+
+function instrumentToJsonString(instrument) {
+  if (instrument.toJSON) {
+    return JSON.stringify(instrument, undefined, 2);
+  } else {
+    return JSON.stringify({
+      methodName: instrument.methodName,
+      details: instrument.details,
+    }, undefined, 2);
+  }
+}
+const canMakePaymentButton = document.getElementById('canMakePaymentButton');
+const payButton = document.getElementById('buyButton');
+
+canMakePaymentButton.setAttribute('style', 'display: none;');
+payButton.setAttribute('style', 'display: none;');
+if (window.PaymentRequest) {
+  payButton.setAttribute('style', 'display: inline;');
+  canMakePaymentButton.setAttribute('style', 'display: inline;');
+
+  canMakePaymentButton.addEventListener('click', function() {
+    let request = initPaymentRequest();
+    onCanMakePaymentButtonClicked(request);
+  });
+  payButton.addEventListener('click', function() {
+    let request = initPaymentRequest();
+    onBuyClicked(request);
+  });
+}
+</script>
+</body>
+</html>
