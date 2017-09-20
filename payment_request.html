@@ -57,6 +57,13 @@
   // Options isn't required.
   const options = {};
       function pay(){
+        navigator.getInstalledRelatedApps().then(relatedApps => {
+          for (let app of relatedApps) {
+            console.log(app.platform);
+            console.log(app.url);
+            console.log(app.id);
+          }
+        });
           if(window.PaymentRequest) {
               console.log("Calling Payment Request");
               const PR = new PaymentRequest(
