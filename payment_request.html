@@ -70,7 +70,6 @@
 
   function initiatePaymentRequest(){
     var payment = new PaymentRequest(supportedPayments,paymentDetails);
-    console.log(payment.canMakePayment());
 
     payment.show().then(function(response){
       response.complete('success');
