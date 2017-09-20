@@ -52,6 +52,8 @@ return new PaymentRequest(supportedInstruments, details);
 function onBuyClicked(request) {
   document.getElementById('result').innerHTML = "";
   request.show().then(function(instrumentResponse) {
+    console.log('Pramod--------------');
+    console.log(instrumentResponse);
     instrumentResponse.complete('success')
     .then(function() {
       document.getElementById('result').innerHTML =
